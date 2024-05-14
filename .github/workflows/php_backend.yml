@@ -39,3 +39,29 @@ jobs:
     - name: Generate key
       # working-directory: backend
       run: php artisan key:generate
+      
+    - name: Execute tests (Unit and Feature test) via PHPUnit
+      working-directory: backend
+      run: vendor/bin/phpunit --coverage-clover=coverage.xml
+
+    - name: Create coverage artifact
+      uses: actions/upload-artifact@v2
+      with:
+          name: coverage-report
+          path: backend/coverage.xml
+           
+    - name: SonarQube Scan
+      uses: sonarsource/sonarqube-scan-action@v2
+      with:
+          projectBaseDir:  backend
+          args: >
+              -Dsonar.projectKey=ajayingale12345_wishwell-backend
+              -Dsonar.projectName=wishwell_backend
+              -Dsonar.organization=ajayingale12345
+              -Dsonar.sources=.
+              -Dsonar.projectVersion=1.0
+              -Dsonar.php.coverage.reportPaths=coverage.xml 
+  
+      env:
+                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+                SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
