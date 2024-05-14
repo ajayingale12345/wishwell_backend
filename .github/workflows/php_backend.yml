@@ -65,3 +65,12 @@ jobs:
       env:
                 SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
                 SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+    - name: Send notification to slack from github using githubaction
+      uses: slackapi/slack-github-action@v1.25.0
+      with:
+         payload: |
+          {
+           "text": "Sonar Analysis done "
+           }
+      env:
+            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
