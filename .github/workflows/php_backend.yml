@@ -83,6 +83,8 @@ jobs:
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL'
+     
+      
 
     - name: Run Trivy in GitHub SBOM mode and submit results to Dependency Graph
       uses: aquasecurity/trivy-action@master
@@ -92,9 +94,15 @@ jobs:
           output: 'dependency-results.sbom.json'
           image-ref: '.'
           github-pat: ${{ secrets.TOKEN_GITHUB }} 
-    - name: Upload Trivy scan results to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@v3
+
+    - name: Create coverage artifact
+      uses: actions/upload-artifact@v2
       with:
-          projectBaseDir:  backend
-          sarif_file: 'trivy-results.sarif'
+          name: trivy result
+          path: trivy-results.sarif
+    # - name: Upload Trivy scan results to GitHub Security tab
+    #   uses: github/codeql-action/upload-sarif@v3
+    #   with:
+    #       projectBaseDir:  backend
+    #       sarif_file: 'trivy-results.sarif'
       
