@@ -37,5 +37,5 @@ jobs:
       working-directory: backend
       run: composer install --prefer-dist --no-progress
     - name: Generate key
-      working-directory: backend
+      # working-directory: backend
       run: php artisan key:generate
