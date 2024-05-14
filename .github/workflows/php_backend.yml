@@ -39,3 +39,7 @@ jobs:
     - name: Generate key
       # working-directory: backend
       run: php artisan key:generate
+      
+    - name: Execute tests (Unit and Feature test) via PHPUnit
+      working-directory: backend
+      run: vendor/bin/phpunit --coverage-clover=coverage.xml
