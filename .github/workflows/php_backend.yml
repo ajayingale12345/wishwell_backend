@@ -1,1 +1,25 @@
+name: PHP Composer
 
+on:
+  push:
+    branches: [ "feature" ]
+  pull_request:
+    branches: [ "feature" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    # defaults:
+    #   run:
+    #     working-directory: backend
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
