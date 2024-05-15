@@ -97,15 +97,16 @@ jobs:
 
     - name: Parse SBOM JSON and generate HTML
       id: generate-html
+      working-directory: backend
       run: |
           # Extract vulnerability data from JSON and generate HTML
-          jq -r '.json | map("<li><strong>Package:</strong> \(.package)<br><strong>Version:</strong> \(.version)<br><strong>Severity:</strong> \(.severity)<br><strong>Description:</strong> \(.description)</li>") | join("\n")' dependency-results.sbom.json > report.html
+          jq -r '.vulnerabilities  | map("<li><strong>Package:</strong> \(.package)<br><strong>Version:</strong> \(.version)<br><strong>Severity:</strong> \(.severity)<br><strong>Description:</strong> \(.description)</li>") | join("\n")' dependency-results.sbom.json > report.html
 
     - name: Save HTML as Artifact
       uses: actions/upload-artifact@v2
       with:
           name: vulnerability-report
-          path: report.html
+          path: backend/report.html
           
     # - name: Upload Trivy scan results to GitHub Security tab
     #   uses: github/codeql-action/upload-sarif@v3
