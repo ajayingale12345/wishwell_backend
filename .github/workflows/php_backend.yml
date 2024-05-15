@@ -100,7 +100,7 @@ jobs:
       working-directory: backend
       run: |
           # Extract vulnerability data from JSON and generate HTML
-          jq -r '.json  | map("<li><strong>Package:</strong> \(.package)<br><strong>Version:</strong> \(.version)<br><strong>Severity:</strong> \(.severity)<br><strong>Description:</strong> \(.description)</li>") | join("\n")'backend/dependency-results.sbom.json > report.html
+          jq -r '.vulnerabilities   | map("<li><strong>Package:</strong> \(.package)<br><strong>Version:</strong> \(.version)<br><strong>Severity:</strong> \(.severity)<br><strong>Description:</strong> \(.description)</li>") | join("\n")'backend/dependency-results.sbom.json > report.html
 
     - name: Save HTML as Artifact
       uses: actions/upload-artifact@v2
