@@ -91,16 +91,25 @@ jobs:
           format: template
           template: "@/contrib/html.tpl"
           output: trivy-report.html
-      
-
     - name: Run Trivy in GitHub SBOM mode and submit results to Dependency Graph
       uses: aquasecurity/trivy-action@master
       with:
           scan-type: 'fs'
-          format: 'github'
-          output: 'dependency-results.sbom.json'
+          format: 'template'
+          template: "@/contrib/html.tpl"
+          output: 'dependency-results.sbom.html'
           image-ref: '.'
           github-pat: ${{ secrets.TOKEN_GITHUB }} 
+      
+
+    # - name: Run Trivy in GitHub SBOM mode and submit results to Dependency Graph
+    #   uses: aquasecurity/trivy-action@master
+    #   with:
+    #       scan-type: 'fs'
+    #       format: 'github'
+    #       output: 'dependency-results.sbom.json'
+    #       image-ref: '.'
+    #       github-pat: ${{ secrets.TOKEN_GITHUB }} 
 
 
     - name: Save sbom.json as Artifact
