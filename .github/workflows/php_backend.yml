@@ -87,7 +87,7 @@ jobs:
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
-          image-ref: '543816070942.dkr.ecr.us-east-1.amazonaws.com/${{ secrets.FRONTEND_REPOSITORY }}:${{ env.IMAGE_TAG }}'
+          # image-ref: '543816070942.dkr.ecr.us-east-1.amazonaws.com/${{ secrets.FRONTEND_REPOSITORY }}:${{ env.IMAGE_TAG }}'
           format: template
           template: "@/contrib/html.tpl"
           output: trivy-report.html
