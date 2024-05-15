@@ -50,30 +50,30 @@ jobs:
           name: coverage-report
           path: backend/coverage.xml
            
-    - name: SonarQube Scan
-      uses: sonarsource/sonarqube-scan-action@v2
-      with:
-          projectBaseDir:  backend
-          args: >
-              -Dsonar.projectKey=ajayingale12345_wishwell-backend
-              -Dsonar.projectName=wishwell_backend
-              -Dsonar.organization=ajayingale12345
-              -Dsonar.sources=.
-              -Dsonar.projectVersion=1.0
-              -Dsonar.php.coverage.reportPaths=coverage.xml 
+    # - name: SonarQube Scan
+    #   uses: sonarsource/sonarqube-scan-action@v2
+    #   with:
+    #       projectBaseDir:  backend
+    #       args: >
+    #           -Dsonar.projectKey=ajayingale12345_wishwell-backend
+    #           -Dsonar.projectName=wishwell_backend
+    #           -Dsonar.organization=ajayingale12345
+    #           -Dsonar.sources=.
+    #           -Dsonar.projectVersion=1.0
+    #           -Dsonar.php.coverage.reportPaths=coverage.xml 
   
-      env:
-                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-                SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-    - name: Send notification to slack from github using githubaction
-      uses: slackapi/slack-github-action@v1.25.0
-      with:
-         payload: |
-          {
-           "text": "Sonar Analysis done "
-           }
-      env:
-            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
+    #   env:
+    #             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    #             SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+    # - name: Send notification to slack from github using githubaction
+    #   uses: slackapi/slack-github-action@v1.25.0
+    #   with:
+    #      payload: |
+    #       {
+    #        "text": "Sonar Analysis done "
+    #        }
+    #   env:
+    #         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
 
     - name: Run Trivy vulnerability scanner in repo mode
       uses: aquasecurity/trivy-action@master
@@ -100,7 +100,7 @@ jobs:
       working-directory: backend
       run: |
           # Extract vulnerability data from JSON and generate HTML
-          jq -r '.vulnerabilities  | map("<li><strong>Package:</strong> \(.package)<br><strong>Version:</strong> \(.version)<br><strong>Severity:</strong> \(.severity)<br><strong>Description:</strong> \(.description)</li>") | join("\n")' dependency-results.sbom.json > report.html
+          jq -r '.json  | map("<li><strong>Package:</strong> \(.package)<br><strong>Version:</strong> \(.version)<br><strong>Severity:</strong> \(.severity)<br><strong>Description:</strong> \(.description)</li>") | join("\n")' dependency-results.sbom.json > report.html
 
     - name: Save HTML as Artifact
       uses: actions/upload-artifact@v2
