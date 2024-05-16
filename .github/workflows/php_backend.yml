@@ -2,7 +2,10 @@ name: PHP Composer
 
 on:
    push:
+
+  
     branches: [ "master" ]
+
   # pull_request:
   #   branches: [ "master" ]
 
@@ -121,10 +124,21 @@ jobs:
       with:
           name: vulnerability-report
           path: backend/trivy-results.sarif
-    - name: Run Snyk to check for vulnerabilities
-      uses: snyk/actions/php@master
-      env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+  security:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+     - name: Install Snyk CLI
+       run: npm install -g snyk
+
+     - name: Authenticate Snyk
+       run: snyk auth ${{ secrets.SNYK_TOKEN }}
+
+     - name: Run Snyk to check for vulnerabilities
+       run: snyk test --all-projects --severity-threshold=high
+        
     
     # - name: Upload Trivy scan results to GitHub Security tab
     #   uses: github/codeql-action/upload-sarif@v3
