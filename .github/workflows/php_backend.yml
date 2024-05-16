@@ -126,7 +126,7 @@ jobs:
       env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
-       projectBaseDir:  backend
+       projectBaseDir: wishwell_backend/backend
           
     # - name: Upload Trivy scan results to GitHub Security tab
     #   uses: github/codeql-action/upload-sarif@v3
