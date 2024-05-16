@@ -124,7 +124,7 @@ jobs:
     - name: Run Snyk to check for vulnerabilities
       uses: snyk/actions/php@master
       with:
-       projectBaseDir: backend
+       projectBaseDir: wishwell_backend/backend
       env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     
