@@ -1,10 +1,10 @@
 name: PHP Composer
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+   push:
+  #   branches: [ "master" ]
+  # pull_request:
+  #   branches: [ "master" ]
 
 permissions:
   contents: read
@@ -50,57 +50,82 @@ jobs:
           name: coverage-report
           path: backend/coverage.xml
            
-    - name: SonarQube Scan
-      uses: sonarsource/sonarqube-scan-action@v2
-      with:
-          projectBaseDir:  backend
-          args: >
-              -Dsonar.projectKey=ajayingale12345_wishwell-backend
-              -Dsonar.projectName=wishwell_backend
-              -Dsonar.organization=ajayingale12345
-              -Dsonar.sources=.
-              -Dsonar.projectVersion=1.0
-              -Dsonar.php.coverage.reportPaths=coverage.xml 
+    # - name: SonarQube Scan
+    #   uses: sonarsource/sonarqube-scan-action@v2
+    #   with:
+    #       projectBaseDir:  backend
+    #       args: >
+    #           -Dsonar.projectKey=ajayingale12345_wishwell-backend
+    #           -Dsonar.projectName=wishwell_backend
+    #           -Dsonar.organization=ajayingale12345
+    #           -Dsonar.sources=.
+    #           -Dsonar.projectVersion=1.0
+    #           -Dsonar.php.coverage.reportPaths=coverage.xml 
   
-      env:
-                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-                SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-    - name: Send notification to slack from github using githubaction
-      uses: slackapi/slack-github-action@v1.25.0
-      with:
-         payload: |
-          {
-           "text": "Sonar Analysis done "
-           }
-      env:
-            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
+    #   env:
+    #             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    #             SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+    # - name: Send notification to slack from github using githubaction
+    #   uses: slackapi/slack-github-action@v1.25.0
+    #   with:
+    #      payload: |
+    #       {
+    #        "text": "Sonar Analysis done "
+    #        }
+    #   env:
+    #         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
 
-    - name: Run Trivy vulnerability scanner in repo mode
-      uses: aquasecurity/trivy-action@master
-      with:
-          scan-type: 'fs'
-          ignore-unfixed: true
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL'
-     
+    # - name: Run Trivy vulnerability scanner in repo mode
+    #   uses: aquasecurity/trivy-action@master
+    #   with:
+    #       scan-type: 'fs'
+    #       ignore-unfixed: true
+    #       format: 'sarif'
+    #       output: 'trivy-results.sarif'
+    #       severity: 'CRITICAL'
+
+    
+    # - name: Run Trivy vulnerability scanner
+    #   uses: aquasecurity/trivy-action@master
+    #   with:
+    #       exit-code: '1'
+    #       ignore-unfixed: true
+    #       vuln-type: 'os,library'
+    #       format: 'template'
+    #       template: '@/contrib/sarif.tpl'
+    #       output: 'trivy-results.sarif'
+    #       severity: 'CRITICAL,HIGH'
+    # - name: Run Trivy in GitHub SBOM mode and submit results to Dependency Graph
+    #   uses: aquasecurity/trivy-action@master
+    #   with:
+    #       scan-type: 'fs'
+    #       format: 'template'
+    #       template: "@/contrib/html.tpl"
+    #       output: 'dependency-results.sbom.html'
+    #       image-ref: '.'
+    #       github-pat: ${{ secrets.TOKEN_GITHUB }} 
       
 
-    - name: Run Trivy in GitHub SBOM mode and submit results to Dependency Graph
-      uses: aquasecurity/trivy-action@master
-      with:
-          scan-type: 'fs'
-          format: 'github'
-          output: 'dependency-results.sbom.json'
-          image-ref: '.'
-          github-pat: ${{ secrets.TOKEN_GITHUB }} 
+    # - name: Run Trivy in GitHub SBOM mode and submit results to Dependency Graph
+    #   uses: aquasecurity/trivy-action@master
+    #   with:
+    #       scan-type: 'fs'
+    #       format: 'github'
+    #       output: 'dependency-results.sbom.json'
+    #       image-ref: '.'
+    #       github-pat: ${{ secrets.TOKEN_GITHUB }} 
 
-    - name: Create coverage artifact
+
+    - name: Save sbom.json as Artifact
       uses: actions/upload-artifact@v2
       with:
-          name: trivy result
-          path: dependency-results.sbom.json
-          
+          name: vulnerability-report
+          path: backend/trivy-results.sarif
+    - name: Run Snyk to check for vulnerabilities
+      uses: snyk/actions/php@master
+      env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    
     # - name: Upload Trivy scan results to GitHub Security tab
     #   uses: github/codeql-action/upload-sarif@v3
     #   with:
