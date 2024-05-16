@@ -123,6 +123,9 @@ jobs:
           path: backend/trivy-results.sarif
   security:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
     steps:
       - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
