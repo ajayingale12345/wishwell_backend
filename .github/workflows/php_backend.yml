@@ -122,11 +122,11 @@ jobs:
           name: vulnerability-report
           path: backend/trivy-results.sarif
     - name: Run Snyk to check for vulnerabilities
-      uses: snyk/actions/node@master
+      uses: snyk/actions/php@master
       env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
-       projectBaseDir: wishwell_backend/backend
+       projectBaseDir: backend
           
     # - name: Upload Trivy scan results to GitHub Security tab
     #   uses: github/codeql-action/upload-sarif@v3
