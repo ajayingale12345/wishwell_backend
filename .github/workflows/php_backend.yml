@@ -123,6 +123,8 @@ jobs:
           path: backend/trivy-results.sarif
     - name: Run Snyk to check for vulnerabilities
       uses: snyk/actions/node@master
+      with:
+        projectBaseDir:  backend
       env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           
