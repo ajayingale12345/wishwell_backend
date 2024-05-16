@@ -121,11 +121,13 @@ jobs:
       with:
           name: vulnerability-report
           path: backend/trivy-results.sarif
-    - name: Run Snyk to check for vulnerabilities
-      uses: snyk/actions/php@master
-      with:
-       projectBaseDir: wishwell_backend/backend
-      env:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/php@master
+        env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     
     # - name: Upload Trivy scan results to GitHub Security tab
