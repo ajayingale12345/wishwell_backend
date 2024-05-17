@@ -62,8 +62,8 @@ jobs:
           key: ${{ needs.build.outputs.deps-cache-key }}
           restore-keys: |
             ${{ runner.os }}-php-
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
+      # - name: Install dependencies
+      #   run: composer install --prefer-dist --no-progress
       - name: Execute tests (Unit and Feature test) via PHPUnit
         run: vendor/bin/phpunit --coverage-clover=coverage.xml
       - name: Create coverage artifact
