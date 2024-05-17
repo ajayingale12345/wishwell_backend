@@ -15,6 +15,7 @@ jobs:
     defaults:
       run:
         working-directory: backend
+        
     steps:
       - uses: actions/checkout@v3
       - name: Set up PHP
@@ -30,7 +31,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-php-
       - name: Install dependencies
-        if: steps.composer-cache.cache-hit != 'true'
+        if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install --prefer-dist --no-progress
       - name: Generate key
         run: php artisan key:generate
