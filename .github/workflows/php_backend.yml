@@ -16,7 +16,7 @@ jobs:
       run:
         working-directory: backend
     outputs:
-      deps-cache-key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}   
+      deps-cache-key: ${{ runner.os }}-php-  
     steps:
       - uses: actions/checkout@v3
       - name: Set up PHP
