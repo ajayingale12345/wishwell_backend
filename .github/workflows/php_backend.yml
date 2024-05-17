@@ -160,5 +160,5 @@ jobs:
           sarif_file: snyk.sarif
           category: my-analysis-tool
         
-     - name: Print Snyk report
-       run: cat snyk.sarif  
+     # - name: Print Snyk report
+     #   run: cat snyk.sarif  
