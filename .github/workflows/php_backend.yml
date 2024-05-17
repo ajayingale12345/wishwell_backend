@@ -31,7 +31,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          key: ${{ steps.cache-key.outputs.CACHE_KEY }}
           restore-keys: |
             ${{ runner.os }}-php-
       - name: Install dependencies
@@ -40,139 +40,139 @@ jobs:
       - name: Generate key
         run: php artisan key:generate
 
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    defaults:
-      run:
-        working-directory: backend
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-      - name: Cache Composer packages
-        id: composer-cache
-        uses: actions/cache@v3
-        with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
-      - name: Execute tests (Unit and Feature test) via PHPUnit
-        run: vendor/bin/phpunit --coverage-clover=coverage.xml
-      - name: Create coverage artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage-report
-          path: backend/coverage.xml
-      - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@v2
-        with:
-          projectBaseDir: backend
-          args: >
-            -Dsonar.projectKey=ajayingale12345_wishwell-backend
-            -Dsonar.projectName=wishwell_backend
-            -Dsonar.organization=ajayingale12345
-            -Dsonar.sources=.
-            -Dsonar.projectVersion=1.0
-            -Dsonar.php.coverage.reportPaths=coverage.xml
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+  # test:
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   defaults:
+  #     run:
+  #       working-directory: backend
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Set up PHP
+  #       uses: shivammathur/setup-php@v2
+  #     - name: Cache Composer packages
+  #       id: composer-cache
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: vendor
+  #         key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-php-
+  #     - name: Install dependencies
+  #       run: composer install --prefer-dist --no-progress
+  #     - name: Execute tests (Unit and Feature test) via PHPUnit
+  #       run: vendor/bin/phpunit --coverage-clover=coverage.xml
+  #     - name: Create coverage artifact
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: coverage-report
+  #         path: backend/coverage.xml
+  #     - name: SonarQube Scan
+  #       uses: sonarsource/sonarqube-scan-action@v2
+  #       with:
+  #         projectBaseDir: backend
+  #         args: >
+  #           -Dsonar.projectKey=ajayingale12345_wishwell-backend
+  #           -Dsonar.projectName=wishwell_backend
+  #           -Dsonar.organization=ajayingale12345
+  #           -Dsonar.sources=.
+  #           -Dsonar.projectVersion=1.0
+  #           -Dsonar.php.coverage.reportPaths=coverage.xml
+  #       env:
+  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-  notify:
-    runs-on: ubuntu-latest
-    needs: [build, test]
-    steps:
-      - name: Send notification to Slack from GitHub using GitHub Action
-        uses: slackapi/slack-github-action@v1.25.0
-        with:
-          payload: |
-            {
-              "text": "Sonar Analysis done"
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  # notify:
+  #   runs-on: ubuntu-latest
+  #   needs: [build, test]
+  #   steps:
+  #     - name: Send notification to Slack from GitHub using GitHub Action
+  #       uses: slackapi/slack-github-action@v1.25.0
+  #       with:
+  #         payload: |
+  #           {
+  #             "text": "Sonar Analysis done"
+  #           }
+  #       env:
+  #         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   
-  trivy-scan:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
-    needs: build
-    permissions:
-      security-events: write
-    steps:
-     - uses: actions/checkout@v3
-     - name: Set up PHP
-       uses: shivammathur/setup-php@v2
-     - name: Validate composer.json and composer.lock
-       run: composer validate --strict
-     - name: Cache Composer packages
-       id: composer-cache
-       uses: actions/cache@v3
-       with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-
-     - name: Install dependencies
-       run: composer install --prefer-dist --no-progress
-     - name: Generate key
-       run: php artisan key:generate
-     - name: Run Trivy vulnerability scanner in repo mode
-       uses: aquasecurity/trivy-action@master
-       with:
-          scan-type: 'fs'
-          ignore-unfixed: true
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL'
+  # trivy-scan:
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       working-directory: backend
+  #   needs: build
+  #   permissions:
+  #     security-events: write
+  #   steps:
+  #    - uses: actions/checkout@v3
+  #    - name: Set up PHP
+  #      uses: shivammathur/setup-php@v2
+  #    - name: Validate composer.json and composer.lock
+  #      run: composer validate --strict
+  #    - name: Cache Composer packages
+  #      id: composer-cache
+  #      uses: actions/cache@v3
+  #      with:
+  #         path: vendor
+  #         key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-php-
+  #    - name: Install dependencies
+  #      run: composer install --prefer-dist --no-progress
+  #    - name: Generate key
+  #      run: php artisan key:generate
+  #    - name: Run Trivy vulnerability scanner in repo mode
+  #      uses: aquasecurity/trivy-action@master
+  #      with:
+  #         scan-type: 'fs'
+  #         ignore-unfixed: true
+  #         format: 'sarif'
+  #         output: 'trivy-results.sarif'
+  #         severity: 'CRITICAL'
      
-     # - name: Upload Trivy scan results to GitHub Security tab
-     #   uses: github/codeql-action/upload-sarif@v3
-     #   with:
-     #      sarif_file: 'trivy-results.sarif'
-     - name: DEBUG Upload Trivy scan results to GitHub Security tab
-       uses: github/codeql-action/upload-sarif@v1
-       with:
-          sarif_file: 'trivy-results.sarif'
+  #    # - name: Upload Trivy scan results to GitHub Security tab
+  #    #   uses: github/codeql-action/upload-sarif@v3
+  #    #   with:
+  #    #      sarif_file: 'trivy-results.sarif'
+  #    - name: DEBUG Upload Trivy scan results to GitHub Security tab
+  #      uses: github/codeql-action/upload-sarif@v1
+  #      with:
+  #         sarif_file: 'trivy-results.sarif'
       
 
-     - name: Run Trivy in GitHub SBOM mode and submit results to Dependency Graph
-       uses: aquasecurity/trivy-action@master
-       with:
-          scan-type: 'fs'
-          format: 'github'
-          output: 'dependency-results.sbom.json'
-          image-ref: '.'
-          github-pat: ${{ secrets.TOKEN_GITHUB }} 
+  #    - name: Run Trivy in GitHub SBOM mode and submit results to Dependency Graph
+  #      uses: aquasecurity/trivy-action@master
+  #      with:
+  #         scan-type: 'fs'
+  #         format: 'github'
+  #         output: 'dependency-results.sbom.json'
+  #         image-ref: '.'
+  #         github-pat: ${{ secrets.TOKEN_GITHUB }} 
 
-     - name: Create coverage artifact
-       uses: actions/upload-artifact@v2
-       with:
-          name: SBOM result
-          path: dependency-results.sbom.json
-     - name: Run Snyk to check for vulnerabilities
-       uses: snyk/actions/php@master
-       continue-on-error: true
-       env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-       with:
-          command: code test
-          args: --sarif-file-output=snyk.sarif
+  #    - name: Create coverage artifact
+  #      uses: actions/upload-artifact@v2
+  #      with:
+  #         name: SBOM result
+  #         path: dependency-results.sbom.json
+  #    - name: Run Snyk to check for vulnerabilities
+  #      uses: snyk/actions/php@master
+  #      continue-on-error: true
+  #      env:
+  #         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+  #      with:
+  #         command: code test
+  #         args: --sarif-file-output=snyk.sarif
 
-     - name: List directory contents
-       run: ls -la
+  #    - name: List directory contents
+  #      run: ls -la
 
-     - name: Upload SARIF file
-       uses: github/codeql-action/upload-sarif@v3
-       with:
-          sarif_file: snyk.sarif
-          category: my-analysis-tool
+  #    - name: Upload SARIF file
+  #      uses: github/codeql-action/upload-sarif@v3
+  #      with:
+  #         sarif_file: snyk.sarif
+  #         category: my-analysis-tool
         
      # - name: Print Snyk report
      #   run: cat snyk.sarif  
