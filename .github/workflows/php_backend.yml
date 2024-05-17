@@ -33,7 +33,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: backend
-          key: ${{ steps.cache-key.outputs.deps-cache-key }}
+          key: ${{ steps.cache-key.outputs.CACHE_KEY }}
           restore-keys: |
             ${{ runner.os }}-php-
       - name: Install dependencies
@@ -57,7 +57,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: backend
-          key: ${{ needs.build.outputs.CACHE_KEY }}
+          key: ${{ needs.build.outputs.deps-cache-key }}
           restore-keys: |
             ${{ runner.os }}-php-
       - name: Install dependencies
