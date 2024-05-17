@@ -27,7 +27,7 @@ jobs:
         run: composer validate --strict
       - name: Calculate Cache-key
         id: cache-key
-        run: echo "CACHE_KEY=${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}" >> "$GITHUB_OUTPUT"
+        run: echo "CACHE_KEY=${{ runner.os }}-php-${{ hashFiles('backend/composer.lock') }}" >> "$GITHUB_OUTPUT"
       - name: Cache Composer packages
         id: composer-cache
         uses: actions/cache@v3
