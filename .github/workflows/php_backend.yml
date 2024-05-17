@@ -22,7 +22,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-         version: '8.0'
+         version: '8.3.7'
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
       - name: Calculate Cache-key
