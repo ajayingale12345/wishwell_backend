@@ -41,7 +41,40 @@ jobs:
         run: composer install --prefer-dist --no-progress
       - name: Generate key
         run: php artisan key:generate
+      
+      - name: Create archive
+        run: |
+          tar -czvf wishwell-backend.tar.gz \
+            app/ \
+            bootstrap/ \
+            config/ \
+            database/ \
+            public/ \
+            resources/ \
+            routes/ \
+            storage/ \
+            vendor/ \
+            .env \
+            artisan \
+            composer.json \
+            composer.lock
+      
+      - name: Install JFrog CLI
+        run: |
+          curl -fL https://getcli.jfrog.io | sh
+          ./jf setup
+        env:
+          CI: true
 
+      - name: Configure JFrog CLI
+        run: |
+          ./jfrog rt config add artifactory \
+            --url ${{ secrets.JFROG_URL }} \
+          --access-token ${{ secrets.JFROG_TOKEN }} 
+      
+      - name: Push Artifacts to JFrog
+        run: ./jfrog rt u "wishwell-backend.tar.gz" "https://cybage12345.jfrog.io/artifactory/phprepo-php/laravel-backend.tar.gz"
+          
   test:
     runs-on: ubuntu-latest
     needs: build
