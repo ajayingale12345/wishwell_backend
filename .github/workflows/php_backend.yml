@@ -59,12 +59,12 @@ jobs:
             composer.json \
             composer.lock
       
-      - name: Install JFrog CLI
-        run: |
-          curl -fL https://getcli.jfrog.io | sh
-          ./jf setup
-        env:
-          CI: true
+      # - name: Install JFrog CLI
+      #   run: |
+      #     curl -fL https://getcli.jfrog.io | sh
+      #     ./jf setup
+      #   env:
+      #     CI: true
 
       - name: Configure JFrog CLI
         run: |
