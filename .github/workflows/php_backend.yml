@@ -44,7 +44,7 @@ jobs:
       - name: Build project
         run: |
              mkdir -p artifacts
-             zip -r artifacts/wishwell_frontend_jfog.zip . -x "vendor/*" -x ".git/*"
+             zip -r artifacts/wishwell_backend_jfog.zip . -x "vendor/*" -x ".git/*"
              cd artifacts
              ls
       - name: Upload artifact to JFrog Artifactory
@@ -53,7 +53,7 @@ jobs:
           JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
          
         run: |
-            curl -H "Authorization: Bearer ${{ secrets.JFROG_TOKEN }} " -T artifacts/wishwell_frontend_jfog.zip "https://cybage12345.jfrog.io/artifactory/phprepo-php-local/"
+            curl -H "Authorization: Bearer ${{ secrets.JFROG_TOKEN }} " -T artifacts/wishwell_backend_jfog.zip "https://cybage12345.jfrog.io/artifactory/phprepo-php-local/"
    
           
   # test:
