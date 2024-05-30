@@ -53,7 +53,7 @@ jobs:
           JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
          
         run: |
-            curl -H "Authorization: Bearer ${{ secrets.JFROG_TOKEN }} " -T artifacts/wishwell_frontend_jfog.zip "$https://cybage12345.jfrog.io/artifactory/wishwell_frontend"
+            curl -H "Authorization: Bearer ${{ secrets.JFROG_TOKEN }} " -T artifacts/wishwell_frontend_jfog.zip "https://cybage12345.jfrog.io/artifactory/phprepo-php-local/"
    
           
   # test:
