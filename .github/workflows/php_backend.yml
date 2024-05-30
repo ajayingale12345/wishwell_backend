@@ -47,7 +47,13 @@ jobs:
              zip -r artifacts/wishwell_frontend_jfog.zip . -x "vendor/*" -x ".git/*"
              cd artifacts
              ls
-      
+      - name: Upload artifact to JFrog Artifactory
+        env:
+          JFROG_URL: ${{ secrets.JFROG_URL }}
+          JFROG_TOKEN: ${{ secrets.JFROG_TOKEN }}
+         
+        run: |
+            curl -H "Authorization: Bearer ${{ secrets.JFROG_TOKEN }} " -T artifacts/wishwell_frontend_jfog.zip "$https://cybage12345.jfrog.io/artifactory/wishwell_frontend"
    
           
   # test:
