@@ -45,6 +45,7 @@ jobs:
         run: |
              mkdir -p artifacts
              zip -r artifacts/wishwell_frontend_jfog.zip . -x "vendor/*" -x ".git/*"
+             cd artifacts
              ls
       
    
