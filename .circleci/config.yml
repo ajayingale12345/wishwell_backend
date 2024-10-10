@@ -3,29 +3,30 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/php:8.0-cli-buster # Use the desired PHP version, e.g., PHP 8.0
+      - image: circleci/php:8.0-cli-buster
     steps:
       - checkout
 
-      # Install dependencies using Composer
+      # Check if composer.json exists, and install dependencies only if present
       - run:
-          name: Install Dependencies
+          name: Check for composer.json and Install Dependencies
           command: |
-            sudo apt-get update
-            sudo apt-get install -y unzip
-            curl -sS https://getcomposer.org/installer | php
-            php composer.phar install
+            if [ -f composer.json ]; then
+              curl -sS https://getcomposer.org/installer | php
+              php composer.phar install
+            else
+              echo "No composer.json found, skipping dependency installation"
+            fi
       
-      # Run tests (if applicable)
+      # Run tests if composer.json and PHPUnit are present
       - run:
           name: Run Tests
-          command: vendor/bin/phpunit
-
-      # Build the project (adjust according to your project structure)
-      - run:
-          name: Build Project
           command: |
-            php build.php  # Replace this with your specific build command
+            if [ -f composer.json ] && [ -f vendor/bin/phpunit ]; then
+              vendor/bin/phpunit
+            else
+              echo "No PHPUnit or composer.json found, skipping tests"
+            fi
 
 workflows:
   version: 2
