@@ -18,23 +18,26 @@ jobs:
             curl -sS https://getcomposer.org/installer | php
             php composer.phar install
 
-      # Ensure PHPUnit is available and run tests
+      # Validate composer.json and composer.lock
+      - run:
+          name: Validate composer.json and composer.lock
+          command: composer validate --strict
+
+      # Run PHPUnit tests
       - run:
           name: Run PHPUnit Tests
           command: |
-            if [ -f composer.json ]; then
-              if [ -f vendor/bin/phpunit ]; then
-                vendor/bin/phpunit
-              else
-                echo "PHPUnit not found, please check if it is properly installed."
-              fi
+            if [ -f vendor/bin/phpunit ]; then
+              vendor/bin/phpunit
             else
-              echo "composer.json file is missing!"
+              echo "PHPUnit not found, please check if it is installed."
             fi
 
       # Store test results for PHPUnit
       - store_test_results:
           path: tests/_output
+
+      # Store artifacts (e.g., code coverage reports)
       - store_artifacts:
           path: tests/_output
 
