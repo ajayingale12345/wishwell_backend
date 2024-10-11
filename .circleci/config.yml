@@ -24,11 +24,11 @@ jobs:
             curl -sS https://getcomposer.org/installer | php
             php composer.phar install
 
-      - run:
-          name: Set permissions for PHPUnit
-          command: |
-            ls -la vendor/bin  # List contents for debugging
-            chmod +x ./vendor/bin/phpunit
+      # - run:
+      #     name: Set permissions for PHPUnit
+      #     command: |
+      #       ls -la vendor/bin  # List contents for debugging
+      #       chmod +x ./vendor/bin/phpunit
 
       - run:
           name: Run PHPUnit Tests
