@@ -25,15 +25,16 @@ jobs:
             php composer.phar install
             ls -la
 
-      # - run:
-      #     name: Set permissions for PHPUnit
-      #     command: |
-      #       ls -la vendor/bin  # List contents for debugging
-      #       chmod +x ./vendor/bin/phpunit
+      - run:
+          name: Set permissions for PHPUnit
+          command: |
+             cd backend
+             chmod +x ./vendor/bin/phpunit
 
       - run:
           name: Run PHPUnit Tests
           command: |
+            cd backend
             ls -la
             ./vendor/bin/phpunit --log-junit test-results.xml test/ExampleTest.php
 
