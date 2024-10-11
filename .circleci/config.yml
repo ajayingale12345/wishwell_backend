@@ -17,6 +17,7 @@ jobs:
           name: Install Dependencies
           command: |
             cd backend
+            ls -la
             composer install
 
       - run:
