@@ -36,7 +36,7 @@ jobs:
           command: |
             cd backend
             ls -la
-            ./vendor/bin/phpunit --log-junit test-results.xml test/ExampleTest.php
+            ./vendor/bin/phpunit --log-junit test-results.xml tests/Feature/ExampleTest.php
 
       - store_test_results:
           path: test-results.xml
