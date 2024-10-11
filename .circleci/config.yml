@@ -28,7 +28,7 @@ jobs:
       - run:
           name: Install and Enable Xdebug
           command: |
-            cd backen
+            cd backend
             sudo apt-get install -y php-xdebug
             echo "zend_extension=xdebug.so" | sudo tee -a /etc/php/8.2/cli/php.ini
             echo "xdebug.mode=coverage" | sudo tee -a /etc/php/8.2/cli/php.ini
