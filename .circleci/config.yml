@@ -33,7 +33,9 @@ jobs:
 
       - run:
           name: Run PHPUnit Tests
-          command: ./vendor/bin/phpunit --log-junit test-results.xml test/ExampleTest.php
+          command: |
+            ls -la
+            ./vendor/bin/phpunit --log-junit test-results.xml test/ExampleTest.php
 
       - store_test_results:
           path: test-results.xml
