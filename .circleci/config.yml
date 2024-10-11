@@ -10,9 +10,11 @@ jobs:
     steps:
       - checkout
 
+      # Install Composer
       - php/install-composer:
-          install-version: 1.10.16  # Ensure correct usage of key-value format
+          install-version: 1.10.16
 
+      # Install Dependencies
       - run:
           name: Install Dependencies
           command: |
@@ -22,20 +24,34 @@ jobs:
             curl -sS https://getcomposer.org/installer | php
             php composer.phar install
 
+      # Install Xdebug
+      - run:
+          name: Install and Enable Xdebug
+          command: |
+            cd backen
+            sudo apt-get install -y php-xdebug
+            echo "zend_extension=xdebug.so" | sudo tee -a /etc/php/8.2/cli/php.ini
+            echo "xdebug.mode=coverage" | sudo tee -a /etc/php/8.2/cli/php.ini
+
+      # Set Permissions for PHPUnit
       - run:
           name: Set permissions for PHPUnit
           command: |
              cd backend
              chmod +x ./vendor/bin/phpunit
 
+      # Run PHPUnit with Code Coverage
       - run:
           name: Run PHPUnit Tests with Code Coverage
           command: |
             cd backend
             ./vendor/bin/phpunit --coverage-clover=coverage.xml
 
+      # Store test results
       - store_test_results:
           path: backend/coverage.xml
+
+      # Store artifacts
       - store_artifacts:
           path: backend/coverage.xml
           destination: test-results
