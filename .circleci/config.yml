@@ -13,6 +13,7 @@ jobs:
          command: |
            ls -la
            cd backend 
+           ls -la
       # Install dependencies with Composer
       - run:
           name: Install Dependencies
