@@ -4,13 +4,15 @@ jobs:
   build:
     docker:
       - image: circleci/php:8.0-cli-buster # Use PHP version that matches your project requirements
-    working_directory:  ~/backend
+  
     steps:
       # Checkout the project code
       - checkout
       - run:
          name: Check Directory Contents
-         command: ls -la 
+         command: |
+           ls -la
+           cd backend 
       # Install dependencies with Composer
       - run:
           name: Install Dependencies
