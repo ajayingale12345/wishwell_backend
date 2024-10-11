@@ -39,13 +39,12 @@ jobs:
           name: Run PHPUnit Tests with Code Coverage
           command: |
             cd backend
-            ./vendor/bin/phpunit --coverage-text
+            ./vendor/bin/phpunit --coverage-clover=coverage.xml
 
       - store_test_results:
-          path: test-results.xml
-
+          path: backend/coverage.xml
       - store_artifacts:
-          path: test-results.xml
+          path: backend/coverage.xml
           destination: test-results
 
   deploy:
