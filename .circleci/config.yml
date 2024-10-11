@@ -23,13 +23,6 @@ jobs:
             php composer.phar install
 
       - run:
-          name: Install Xdebug for Code Coverage
-          command: |
-            cd backend
-            sudo apt-get install -y php-xdebug
-            php -m | grep xdebug  # Verify Xdebug installation
-
-      - run:
           name: Set permissions for PHPUnit
           command: |
              cd backend
