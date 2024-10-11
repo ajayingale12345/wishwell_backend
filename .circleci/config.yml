@@ -14,6 +14,7 @@ jobs:
           name: Set permissions for PHPUnit
           command: |
             cd backend 
+            ls -la
             chmod +x ./vendor/bin/phpunit
           
       - run:
