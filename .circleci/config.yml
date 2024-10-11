@@ -9,7 +9,7 @@ jobs:
       - image: cimg/php:8.2.7
     steps:
       - checkout
-      
+
       - php/install-composer:
           install-version: 1.10.16  # Ensure correct usage of key-value format
 
@@ -17,13 +17,16 @@ jobs:
           name: Install Dependencies
           command: |
             cd backend
-            ls -la
-            
             sudo apt-get update
             sudo apt-get install -y unzip
             curl -sS https://getcomposer.org/installer | php
             php composer.phar install
-            ls -la
+
+      - run:
+          name: Install Xdebug for Code Coverage
+          command: |
+            sudo apt-get install -y php-xdebug
+            php -m | grep xdebug  # Verify Xdebug installation
 
       - run:
           name: Set permissions for PHPUnit
@@ -32,11 +35,11 @@ jobs:
              chmod +x ./vendor/bin/phpunit
 
       - run:
-          name: Run PHPUnit Tests
+          name: Run PHPUnit Tests with Code Coverage
           command: |
             cd backend
-            ls -la
-            ./vendor/bin/phpunit 
+            ./vendor/bin/phpunit --coverage-text
+
       - store_test_results:
           path: test-results.xml
 
