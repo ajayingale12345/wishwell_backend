@@ -25,6 +25,7 @@ jobs:
       - run:
           name: Install Xdebug for Code Coverage
           command: |
+            cd backend
             sudo apt-get install -y php-xdebug
             php -m | grep xdebug  # Verify Xdebug installation
 
