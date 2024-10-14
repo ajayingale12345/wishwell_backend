@@ -24,14 +24,7 @@ jobs:
             curl -sS https://getcomposer.org/installer | php
             php composer.phar install
 
-      # Install Xdebug
-      - run:
-          name: Install and Enable Xdebug
-          command: |
-            cd backend
-            sudo apt-get install -y php-xdebug
-            echo "zend_extension=xdebug.so" | sudo tee -a /etc/php/8.2/cli/php.ini
-            echo "xdebug.mode=coverage" | sudo tee -a /etc/php/8.2/cli/php.ini
+     
 
       # Set Permissions for PHPUnit
       - run:
